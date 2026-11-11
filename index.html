@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="ko" class="h-full bg-slate-950 text-slate-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>디지털 리터러시 & 인지전 대응 자가진단</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Custom Tailwind Config -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              900: '#0c4a6e',
+            },
+            cyber: {
+              accent: '#00f0ff',
+              purple: '#8a2be2',
+              pink: '#ff007f',
+              dark: '#0b0f19',
+              card: '#131b2e'
+            }
+          },
+          animation: {
+            'glow': 'glow 2s infinite alternate',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'fade-in': 'fadeIn 0.5s ease-out forwards',
+          },
+          keyframes: {
+            glow: {
+              '0%': { boxShadow: '0 0 5px rgba(0, 240, 255, 0.2), inset 0 0 5px rgba(0, 240, 255, 0.1)' },
+              '100%': { boxShadow: '0 0 20px rgba(0, 240, 255, 0.6), inset 0 0 10px rgba(0, 240, 255, 0.3)' }
+            },
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(10px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    
+    body {
+      font-family: 'Pretendard', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Custom Glassmorphism styling */
+    .glass-card {
+      background: rgba(19, 27, 46, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .glass-card-hover:hover {
+      border-color: rgba(0, 240, 255, 0.4);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+
+    /* Intro Overlay animation */
+    @keyframes textBlinkFade {
+      0% { opacity: 0; transform: scale(0.95); }
+      15% { opacity: 1; transform: scale(1); }
+      30% { opacity: 0.4; }
+      45% { opacity: 1; }
+      60% { opacity: 0.5; }
+      80% { opacity: 1; filter: brightness(1.2); }
+      100% { opacity: 0; transform: scale(1.02); }
+    }
+
+    .animate-intro-text {
+      animation: textBlinkFade 5s ease-in-out forwards;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col justify-between bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500 selection:text-black">
+
+  <!-- ==========================================
+       1. INTRO OVERLAY (3초 동안 깜빡이며 나타났다 사라짐)
+       ========================================== -->
+  <div id="intro-overlay" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/95 backdrop-blur-xl p-6 transition-opacity duration-700">
+    <div class="max-w-2xl text-center animate-intro-text">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold uppercase tracking-wider mb-6">
+        <i data-lucide="shield-alert" class="w-4 h-4"></i>
+        <span>Cognitive Warfare & Fake News Research</span>
+      </div>
+      
+      <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white mb-4 leading-tight">
+        "디지털 공간 속 인지전과 정보 조작,<br class="hidden sm:inline"/>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-400">
+          당신의 정보 판단력은 안전합니까?
+        </span>"
+      </h1>
+      
+      <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl mx-auto font-normal">
+        본 자가진단은 인지전과 허위정보가 개인의 인식과 여론 형성에 미치는 영향을 파악하고, 일상 속 비판적 정보 수용 및 실천적 대응 방안을 모색하기 위해 제작되었습니다.
+      </p>
+
+      <div class="mt-8 flex justify-center items-center gap-2 text-xs text-slate-500">
+        <div class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></div>
+        진단 화면으로 이동 중입니다...
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================
+       MAIN APP CONTAINER
+       ========================================== -->
+  <div id="app-container" class="w-full max-w-3xl mx-auto px-4 py-6 sm:py-10 flex-grow flex flex-col justify-center opacity-0 transition-opacity duration-700">
+
+    <!-- APP HEADER -->
+    <header class="mb-8 text-center">
+      <div class="inline-flex items-center gap-2 text-cyan-400 text-sm font-semibold mb-2">
+        <i data-lucide="cpu" class="w-4 h-4"></i>
+        <span>Digital Literacy Self-Diagnosis</span>
+      </div>
+      <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+        디지털 정보 취약도 자가진단
+      </h2>
+      <p class="text-slate-400 text-xs sm:text-sm mt-1">
+        알고리즘과 정보 조작의 시대, 나의 정보 수용 습관을 체크해보세요.
+      </p>
+    </header>
+
+
+    <!-- VIEW 1: START SCREEN (설명 및 시작 버튼) -->
+    <main id="view-start" class="glass-card rounded-2xl p-6 sm:p-8 text-center shadow-2xl relative overflow-hidden">
+      <div class="absolute -top-24 -right-24 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="w-16 h-16 bg-cyan-500/10 border border-cyan-500/30 rounded-2xl flex items-center justify-center mx-auto mb-6 text-cyan-400">
+        <i data-lucide="search-check" class="w-8 h-8"></i>
+      </div>
+
+      <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">
+        나의 디지털 미디어 비판 수준은?
+      </h3>
+      <p class="text-slate-300 text-sm leading-relaxed max-w-md mx-auto mb-6">
+        일상적인 인터넷·SNS 이용 습관 체크리스트(4문항)와 현실적인 상황별 선택지(3문항)를 통해 당신의 인지전 취약 유형을 분석합니다.
+      </p>
+
+      <!-- 문항 구성 안내 카톡 스타일 -->
+      <div class="grid grid-cols-2 gap-3 text-left max-w-md mx-auto mb-8 text-xs">
+        <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
+          <div class="font-semibold text-cyan-400 mb-1 flex items-center gap-1.5">
+            <i data-lucide="check-square" class="w-3.5 h-3.5"></i> PART 1
+          </div>
+          <div class="text-slate-300">평소 정보 이용 습관<br><span class="text-slate-500">(OX 체크리스트)</span></div>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
+          <div class="font-semibold text-indigo-400 mb-1 flex items-center gap-1.5">
+            <i data-lucide="layers" class="w-3.5 h-3.5"></i> PART 2
+          </div>
+          <div class="text-slate-300">상황별 행동 대응<br><span class="text-slate-500">(3/4지 선다)</span></div>
+        </div>
+      </div>
+
+      <button onclick="startDiagnosis()" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold rounded-xl shadow-lg shadow-cyan-500/20 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 mx-auto">
+        <span>자가진단 시작하기</span>
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </button>
+    </main>
+
+
+    <!-- VIEW 2: DIAGNOSIS QUESTIONNAIRE (진단 문항 진행) -->
+    <main id="view-quiz" class="hidden glass-card rounded-2xl p-6 sm:p-8 shadow-2xl relative">
+      
+      <!-- Progress Bar Header -->
+      <div class="mb-6">
+        <div class="flex justify-between items-center text-xs font-semibold text-slate-400 mb-2">
+          <span id="quiz-part-label" class="text-cyan-400 uppercase tracking-wider">PART 1. 습관 체크</span>
+          <span id="quiz-progress-text">1 / 7</span>
+        </div>
+        <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
+          <div id="quiz-progress-bar" class="bg-gradient-to-r from-cyan-500 to-indigo-500 h-full w-0 transition-all duration-300"></div>
+        </div>
+      </div>
+
+      <!-- Question Content Area -->
+      <div id="question-container" class="min-h-[220px] flex flex-col justify-center animate-fade-in">
+        <!-- Question Title inserted dynamically -->
+      </div>
+
+      <!-- Navigation / Controls -->
+      <div class="mt-8 pt-4 border-t border-slate-800/80 flex justify-between items-center">
+        <button id="btn-prev" onclick="prevQuestion()" class="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-white transition flex items-center gap-1 disabled:opacity-30 disabled:hover:text-slate-400" disabled>
+          <i data-lucide="chevron-left" class="w-4 h-4"></i> 이전
+        </button>
+        <span class="text-xs text-slate-500 hidden sm:inline">솔직하게 답변할수록 정확한 결과가 나옵니다.</span>
+      </div>
+    </main>
+
+
+    <!-- VIEW 3: RESULT REPORT (결과 및 실천 리포트) -->
+    <main id="view-result" class="hidden glass-card rounded-2xl p-6 sm:p-8 shadow-2xl animate-fade-in space-y-8">
+      
+      <!-- Result Top Header -->
+      <div class="text-center pb-6 border-b border-slate-800">
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 mb-3">
+          진단 완료 리포트
+        </span>
+        <h3 id="result-type-title" class="text-2xl sm:text-3xl font-extrabold text-white mb-2">
+          <!-- Result Title -->
+        </h3>
+        <p id="result-type-badge" class="text-sm font-semibold text-indigo-400 mb-4">
+          <!-- Result Subtitle -->
+        </p>
+        <p id="result-type-desc" class="text-slate-300 text-sm leading-relaxed max-w-xl mx-auto bg-slate-900/60 p-4 rounded-xl border border-slate-800/80">
+          <!-- Detailed Description -->
+        </p>
+      </div>
+
+      <!-- Vulnerability Gauge Score Section -->
+      <div class="bg-slate-900/80 rounded-xl p-5 border border-slate-800">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+            <i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i> 허위정보 / 인지전 취약도 지수
+          </span>
+          <span id="result-score-text" class="text-sm font-bold text-cyan-400">0%</span>
+        </div>
+        <div class="w-full bg-slate-950 h-3 rounded-full overflow-hidden p-0.5 border border-slate-800">
+          <div id="result-score-bar" class="h-full rounded-full bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-500 transition-all duration-1000 w-0"></div>
+        </div>
+        <div class="flex justify-between text-[10px] text-slate-500 mt-1.5">
+          <span>안전 (낮음)</span>
+          <span>주의 (보통)</span>
+          <span>위험 (높음)</span>
+        </div>
+      </div>
+
+      <!-- Action Solutions (Student Proposals Highlight) -->
+      <div>
+        <div class="flex items-center gap-2 mb-4">
+          <i data-lucide="lightbulb" class="w-5 h-5 text-amber-400"></i>
+          <h4 class="text-lg font-bold text-white">교내 학생 설문 기반 3대 실천 가이드</h4>
+        </div>
+        <p class="text-xs text-slate-400 mb-4">
+          고등학생들이 자발적으로 제안한 일상 속 인지전 방어 규칙을 바탕으로 도출된 맞춤 솔루션입니다.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Solution Card 1 -->
+          <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/40 transition">
+            <div class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center font-bold text-sm mb-3">1</div>
+            <h5 class="text-sm font-bold text-white mb-1.5">콘텐츠 교차 검증 (Double-Check)</h5>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              숏폼, 릴스 알고리즘 콘텐츠를 즉시 사실로 믿지 않고, 제도권 언론 뉴스나 공식 정보와 대조해 보는 이중 체크 습관을 기릅니다.
+            </p>
+          </div>
+
+          <!-- Solution Card 2 -->
+          <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/40 transition">
+            <div class="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center font-bold text-sm mb-3">2</div>
+            <h5 class="text-sm font-bold text-white mb-1.5">비판적 질문 던지기</h5>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              "생산자가 누구인가?", "정치적·상업적 의도는 없는가?", "맥락이 왜곡되지 않았는가?" 스스로 질문하는 사고 태도를 기릅니다.
+            </p>
+          </div>
+
+          <!-- Solution Card 3 -->
+          <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 hover:border-cyan-500/40 transition">
+            <div class="w-8 h-8 rounded-lg bg-pink-500/10 text-pink-400 flex items-center justify-center font-bold text-sm mb-3">3</div>
+            <h5 class="text-sm font-bold text-white mb-1.5">교실 내 혐오 놀이화 경계</h5>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              가짜뉴스에 기반한 이분법적 선동과 소수자 조롱을 장난으로 소비하지 않으며, 단톡방 등에서 무분별한 확산을 끊어냅니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Checklist for Self-Pledge -->
+      <div class="bg-slate-900/50 p-5 rounded-xl border border-slate-800">
+        <h4 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
+          <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
+          나의 일상 비판적 정보 수용 실천 다짐
+        </h4>
+        <p class="text-xs text-slate-400 mb-3">오늘부터 실천할 항목에 직접 체크해보세요:</p>
+        
+        <div class="space-y-2 text-xs sm:text-sm">
+          <label class="flex items-center gap-2.5 p-2.5 rounded-lg bg-slate-900/90 border border-slate-800/80 cursor-pointer hover:bg-slate-800/60 transition">
+            <input type="checkbox" class="w-4 h-4 rounded accent-cyan-500 bg-slate-950 border-slate-700">
+            <span class="text-slate-200">정보의 최초 출처 및 언론사 보도 여부 확인하기</span>
+          </label>
+          <label class="flex items-center gap-2.5 p-2.5 rounded-lg bg-slate-900/90 border border-slate-800/80 cursor-pointer hover:bg-slate-800/60 transition">
+            <input type="checkbox" class="w-4 h-4 rounded accent-cyan-500 bg-slate-950 border-slate-700">
+            <span class="text-slate-200">자극적인 제목과 감정적 선동 표현에 주의하기</span>
+          </label>
+          <label class="flex items-center gap-2.5 p-2.5 rounded-lg bg-slate-900/90 border border-slate-800/80 cursor-pointer hover:bg-slate-800/60 transition">
+            <input type="checkbox" class="w-4 h-4 rounded accent-cyan-500 bg-slate-950 border-slate-700">
+            <span class="text-slate-200">사실 여부가 확인되지 않은 소문이나 단톡방 짤 전달하지 않기</span>
+          </label>
+          <label class="flex items-center gap-2.5 p-2.5 rounded-lg bg-slate-900/90 border border-slate-800/80 cursor-pointer hover:bg-slate-800/60 transition">
+            <input type="checkbox" class="w-4 h-4 rounded accent-cyan-500 bg-slate-950 border-slate-700">
+            <span class="text-slate-200">통계 수치와 개인의 자극적 사례 주장 구분하여 읽기</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
+        <button onclick="restartDiagnosis()" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white text-xs sm:text-sm font-semibold rounded-xl transition flex items-center justify-center gap-2">
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i> 다시 진단하기
+        </button>
+        <button onclick="copyShareText()" class="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black text-xs sm:text-sm font-bold rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20">
+          <i data-lucide="share-2" class="w-4 h-4"></i> 결과 공유하기
+        </button>
+      </div>
+
+      <!-- Toast Container for Notification -->
+      <div id="toast-msg" class="hidden fixed bottom-6 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-lg bg-cyan-500 text-black font-bold text-xs shadow-xl z-50">
+        결과가 클립보드에 복사되었습니다!
+      </div>
+    </main>
+
+  </div>
+
+
+  <!-- FOOTER -->
+  <footer class="w-full text-center py-4 border-t border-slate-900 text-slate-600 text-[11px]">
+    <p>Cognitive Warfare & Media Literacy Self-Diagnosis Project © 2026</p>
+  </footer>
+
+
+  <!-- JavaScript Application Logic -->
+  <script>
+    // Initialize Lucide Icons
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+      initIntroOverlay();
+    });
+
+    // Intro Overlay handling (5s blink & fade effect)
+    function initIntroOverlay() {
+      const overlay = document.getElementById('intro-overlay');
+      const appContainer = document.getElementById('app-container');
+
+      setTimeout(() => {
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+        appContainer.classList.remove('opacity-0');
+        appContainer.classList.add('opacity-100');
+      }, 5000);
+    }
+
+    // Diagnostic Questionnaire Data
+    const questions = [
+      // PART 1: Habit Checklist (OX Type)
+      {
+        part: "PART 1. 일상 습관 체크",
+        type: "ox",
+        title: "1. SNS나 온라인 커뮤니티에서 본 정보를 출처 확인 없이 사실이라고 받아들인 적이 있다.",
+        category: "source", // 출처 확인 관련
+        options: [
+          { label: "예 (그렇다)", score: 2, key: "yes" },
+          { label: "아니오 (그렇지 않다)", score: 0, key: "no" }
+        ]
+      },
+      {
+        part: "PART 1. 일상 습관 체크",
+        type: "ox",
+        title: "2. 나의 기존 생각이나 평소 신념과 일치하는 정보는 별다른 의심 없이 받아들이는 편이다.",
+        category: "confirmation_bias", // 확증편향
+        options: [
+          { label: "예 (그렇다)", score: 2, key: "yes" },
+          { label: "아니오 (그렇지 않다)", score: 0, key: "no" }
+        ]
+      },
+      {
+        part: "PART 1. 일상 습관 체크",
+        type: "ox",
+        title: "3. 같은 내용의 정보나 유사 사건을 숏폼/커뮤니티에서 반복 접하면 실제보다 자주 발생한다고 느낀 적이 있다.",
+        category: "algorithm", // 알고리즘 착시
+        options: [
+          { label: "예 (그렇다)", score: 2, key: "yes" },
+          { label: "아니오 (그렇지 않다)", score: 0, key: "no" }
+        ]
+      },
+      {
+        part: "PART 1. 일상 습관 체크",
+        type: "ox",
+        title: "4. 정보의 출처나 객관적 근거를 직접 확인하기보다, 주변 사람들의 반응이나 댓글 여론을 보고 판단한다.",
+        category: "conformity", // 동조 심리
+        options: [
+          { label: "예 (그렇다)", score: 2, key: "yes" },
+          { label: "아니오 (그렇지 않다)", score: 0, key: "no" }
+        ]
+      },
+
+      // PART 2: Scenario-based Choice (Multiple Choice)
+      {
+        part: "PART 2. 상황별 대응 진단",
+        type: "mc",
+        title: "상황 1. 자극적인 숏폼/릴스나 충격적인 자극성 뉴스 헤드라인을 접했을 때 당신의 반응은?",
+        category: "emotional_sensation",
+        options: [
+          { label: "A. 내용이 흥미롭고 충격적이어서 바로 친구들이나 단톡방에 공유한다.", score: 3, key: "sensational_high" },
+          { label: "B. 댓글 반응을 먼저 살펴보고, 대부분의 사람들이 맞다고 하면 사실로 믿는다.", score: 2, key: "sensational_mid" },
+          { label: "C. 일단 사실인지 제도권 언론이나 공식 출처 검색을 통해 '이중 체크(Double-Check)' 한다.", score: 0, key: "sensational_low" }
+        ]
+      },
+      {
+        part: "PART 2. 상황별 대응 진단",
+        type: "mc",
+        title: "상황 2. 단톡방이나 SNS에서 출처 불분의 가짜뉴스에 기반한 혐오·조롱 밈(Meme)이 유행할 때 당신의 행동은?",
+        category: "hate_speech",
+        options: [
+          { label: "A. 단순한 유머/장난이므로 함께 웃고 주변 친구들에게 재공유한다.", score: 3, key: "hate_high" },
+          { label: "B. 찝찝하거나 왜곡된 느낌이 들지만, 분위기를 깨기 싫어 가만히 관망한다.", score: 1, key: "hate_mid" },
+          { label: "C. 무분별한 혐오와 선동임을 인지하고 단톡방 등에서 확산을 멈추며 비판적으로 바라본다.", score: 0, key: "hate_low" }
+        ]
+      },
+      {
+        part: "PART 2. 상황별 대응 진단",
+        type: "mc",
+        title: "상황 3. 특정 단체나 인물을 자극적으로 비판하는 글이나 영상 콘텐츠를 읽을 때 어떤 생각을 하는가?",
+        category: "critical_thinking",
+        options: [
+          { label: "A. 글쓴이의 주장에 몰입하여 분노하거나 내용 그대로를 받아들인다.", score: 3, key: "critical_low" },
+          { label: "B. 이슈가 얼마나 재미있는지, 자극적인 내용인지 여부 위주로만 본다.", score: 2, key: "critical_mid" },
+          { label: "C. 정보 생산자의 의도, 정치적·상업적 목적, 맥락 왜곡 여부를 비판적으로 질문해본다.", score: 0, key: "critical_high" }
+        ]
+      }
+    ];
+
+    // Diagnostic Results Criteria Definitions (5 Types)
+    const resultTypes = {
+      algorithm: {
+        title: "알고리즘 수동 소비형",
+        badge: "⚠️ 알고리즘 편향 및 반복 노출 위험군",
+        desc: "숏폼이나 SNS 알고리즘이 제공하는 반복적 정보에 쉽게 영향을 받는 유형입니다. 동일한 주제가 반복 노출되면 현실에서도 해당 사건이 압도적으로 많이 일어난다고 착각하는 '가용성 편향'에 취약할 수 있습니다.",
+        scoreBase: 80
+      },
+      conformity: {
+        title: "동조 심리 취약형",
+        badge: "⚠️ 댓글 여론 및 다수 의견 주도 위험군",
+        desc: "정보 자체의 사실성이나 근거보다 주변 사람들의 반응, 베스트 댓글, 다수의 동조 여부에 따라 판단을 내리는 경향이 강합니다. 군중 심리를 이용한 인지전 선동에 노출되기 쉽습니다.",
+        scoreBase: 70
+      },
+      confirmation_bias: {
+        title: "확증 편향 취약형",
+        badge: "⚠️ 신념 맞춤형 정보 선택 위험군",
+        desc: "자신의 기존 생각이나 가치관과 일치하는 정보는 출처 검증 없이 신뢰하고, 반대되는 정보는 배척하는 경향이 있습니다. 조작된 정보라도 내 입맛에 맞으면 사실로 수용할 위험이 있습니다.",
+        scoreBase: 75
+      },
+      emotional_sensation: {
+        title: "자극·감정 정보 반응형",
+        badge: "⚠️ 자극적 숏폼 & 감정적 이슈 확산 위험군",
+        desc: "자극적인 제목, 감정적인 자극, 혐오성 밈 등에 빠르게 반응하고 검증 없이 즉시 공유하는 습관이 있습니다. 릴스나 단톡방을 통한 허위정보 확산의 매개체가 될 위험이 있습니다.",
+        scoreBase: 85
+      },
+      guardian: {
+        title: "비판적 정보 파수꾼",
+        badge: "🛡️ 우수한 미디어 리터러시 보유",
+        desc: "정보의 최초 출처를 교차 검증하고, 생산자의 숨겨진 의도나 맥락 왜곡 여부를 상시 파악하는 건강한 비판적 사고 습관을 가지고 계십니다. 허위정보 확산을 차단하는 리더 역할을 수행할 수 있습니다.",
+        scoreBase: 15
+      }
+    };
+
+    // State Variables
+    let currentIdx = 0;
+    let userAnswers = new Array(questions.length).fill(null);
+
+    // Navigation functions
+    function startDiagnosis() {
+      document.getElementById('view-start').classList.add('hidden');
+      document.getElementById('view-quiz').classList.remove('hidden');
+      currentIdx = 0;
+      userAnswers.fill(null);
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const q = questions[currentIdx];
+      const container = document.getElementById('question-container');
+      const progressText = document.getElementById('quiz-progress-text');
+      const progressBar = document.getElementById('quiz-progress-bar');
+      const partLabel = document.getElementById('quiz-part-label');
+      const btnPrev = document.getElementById('btn-prev');
+
+      // Update Header & Progress
+      partLabel.innerText = q.part;
+      progressText.innerText = `${currentIdx + 1} / ${questions.length}`;
+      const progressPercent = ((currentIdx + 1) / questions.length) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+
+      btnPrev.disabled = currentIdx === 0;
+
+      // Render Question Body
+      let optionsHtml = '';
+      if (q.type === 'ox') {
+        optionsHtml = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+            ${q.options.map((opt, i) => `
+              <button onclick="selectOption(${i})" class="p-5 rounded-xl border ${userAnswers[currentIdx] === i ? 'border-cyan-400 bg-cyan-500/10 text-cyan-300 ring-2 ring-cyan-500/30' : 'border-slate-800 bg-slate-900/80 hover:border-slate-700 text-slate-200'} transition-all text-left flex items-center justify-between group">
+                <span class="font-bold text-base sm:text-lg">${opt.label}</span>
+                <div class="w-6 h-6 rounded-full border border-slate-700 group-hover:border-cyan-400 flex items-center justify-center text-xs">
+                  ${userAnswers[currentIdx] === i ? '✓' : ''}
+                </div>
+              </button>
+            `).join('')}
+          </div>
+        `;
+      } else {
+        optionsHtml = `
+          <div class="space-y-3 mt-6">
+            ${q.options.map((opt, i) => `
+              <button onclick="selectOption(${i})" class="w-full p-4 rounded-xl border ${userAnswers[currentIdx] === i ? 'border-indigo-400 bg-indigo-500/10 text-indigo-300 ring-2 ring-indigo-500/30' : 'border-slate-800 bg-slate-900/80 hover:border-slate-700 text-slate-200'} transition-all text-left flex items-start gap-3 group">
+                <div class="w-5 h-5 rounded-full border border-slate-700 group-hover:border-indigo-400 flex items-center justify-center text-xs mt-0.5 shrink-0">
+                  ${userAnswers[currentIdx] === i ? '✓' : ''}
+                </div>
+                <span class="text-xs sm:text-sm leading-relaxed">${opt.label}</span>
+              </button>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      container.innerHTML = `
+        <div class="animate-fade-in">
+          <span class="text-xs text-cyan-400 font-medium mb-1 inline-block">[Q${currentIdx + 1}]</span>
+          <h4 class="text-base sm:text-lg font-bold text-white leading-snug">${q.title}</h4>
+          ${optionsHtml}
+        </div>
+      `;
+
+      lucide.createIcons();
+    }
+
+    function selectOption(optionIndex) {
+      userAnswers[currentIdx] = optionIndex;
+      renderQuestion();
+
+      // Auto advance after slight delay for smooth UX
+      setTimeout(() => {
+        if (currentIdx < questions.length - 1) {
+          currentIdx++;
+          renderQuestion();
+        } else {
+          calculateResult();
+        }
+      }, 250);
+    }
+
+    function prevQuestion() {
+      if (currentIdx > 0) {
+        currentIdx--;
+        renderQuestion();
+      }
+    }
+
+    // Result Calculation Algorithm
+    function calculateResult() {
+      document.getElementById('view-quiz').classList.add('hidden');
+      document.getElementById('view-result').classList.remove('hidden');
+
+      let totalScore = 0;
+      let maxScore = 0;
+
+      // Category Score Tracking
+      const categoryScores = {
+        source: 0,
+        confirmation_bias: 0,
+        algorithm: 0,
+        conformity: 0,
+        emotional_sensation: 0,
+        hate_speech: 0,
+        critical_thinking: 0
+      };
+
+      questions.forEach((q, idx) => {
+        const selectedOptIdx = userAnswers[idx];
+        if (selectedOptIdx !== null) {
+          const opt = q.options[selectedOptIdx];
+          totalScore += opt.score;
+          categoryScores[q.category] += opt.score;
+        }
+        maxScore += 3; // Maximum potential score per question
+      });
+
+      // Vulnerability Index percentage calculation
+      const vulnerabilityPercent = Math.min(100, Math.round((totalScore / 15) * 100));
+
+      // Determine Dominant Risk Type
+      let finalTypeKey = 'guardian';
+
+      if (vulnerabilityPercent < 25) {
+        finalTypeKey = 'guardian';
+      } else {
+        // Find highest scoring category
+        if (categoryScores.hate_speech >= 2 || categoryScores.emotional_sensation >= 2) {
+          finalTypeKey = 'emotional_sensation';
+        } else if (categoryScores.conformity >= 2) {
+          finalTypeKey = 'conformity';
+        } else if (categoryScores.confirmation_bias >= 2) {
+          finalTypeKey = 'confirmation_bias';
+        } else if (categoryScores.algorithm >= 2) {
+          finalTypeKey = 'algorithm';
+        } else {
+          finalTypeKey = 'emotional_sensation';
+        }
+      }
+
+      const res = resultTypes[finalTypeKey];
+
+      // Render Result UI
+      document.getElementById('result-type-title').innerText = res.title;
+      document.getElementById('result-type-badge').innerText = res.badge;
+      document.getElementById('result-type-desc').innerText = res.desc;
+
+      // Score Bar animation
+      document.getElementById('result-score-text').innerText = `${vulnerabilityPercent}%`;
+      setTimeout(() => {
+        document.getElementById('result-score-bar').style.width = `${vulnerabilityPercent}%`;
+      }, 200);
+
+      lucide.createIcons();
+    }
+
+    function restartDiagnosis() {
+      document.getElementById('view-result').classList.add('hidden');
+      document.getElementById('view-start').classList.remove('hidden');
+      currentIdx = 0;
+      userAnswers.fill(null);
+      document.getElementById('result-score-bar').style.width = '0%';
+    }
+
+    function copyShareText() {
+      const typeTitle = document.getElementById('result-type-title').innerText;
+      const scoreText = document.getElementById('result-score-text').innerText;
+      
+      const shareText = `[디지털 정보 취약도 자가진단 결과]\n나의 진단 결과: ${typeTitle}\n허위정보 취약도: ${scoreText}\n\n당신의 디지털 정보 판단력도 테스트해보세요!`;
+
+      // Fallback copy strategy
+      const tempTextArea = document.createElement('textarea');
+      tempTextArea.value = shareText;
+      document.body.appendChild(tempTextArea);
+      tempTextArea.select();
+      try {
+        document.execCommand('copy');
+        showToast();
+      } catch (err) {
+        console.error('Copy failed', err);
+      }
+      document.body.removeChild(tempTextArea);
+    }
+
+    function showToast() {
+      const toast = document.getElementById('toast-msg');
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
